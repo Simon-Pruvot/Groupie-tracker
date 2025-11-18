@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Groupie Tracker</title>
+	</head>
+	<body>
+		<main>
+			<h1>Tous les concerts</h1>
+			{{ if .Artists }}
+				{{ range .Artists }}
+					<article style="border:1px solid #ddd; padding:12px; margin:12px 0;">
+						<header style="display:flex; gap:12px; align-items:center;">
+							<img src="{{ .Image }}" alt="{{ .Name }}" style="width:80px; height:80px; object-fit:cover; border-radius:4px;">
+							<div>
+								<h2 style="margin:0;">{{ .Name }}</h2>
+								<div>
+									<strong>Création:</strong> {{ .CreationDate }} — <strong>Premier album:</strong> {{ .FirstAlbum }}
+								</div>
+							</div>
+						</header>
+
+						<section>
+							<strong>Membres:</strong>
+							{{ if .Members }}
+								<ul>
+									{{ range .Members }}
+										<li>{{ . }}</li>
+									{{ end }}
+								</ul>
+							{{ else }}
+								<p>N/A</p>
+							{{ end }}
+						</section>
+
+						<section>
+							<strong>Lieu(x):</strong>
+							{{ if .Locations }}
+								<ul>
+									{{ range .Locations }}
+										<li>{{ . }}</li>
+									{{ end }}
+								</ul>
+							{{ else }}
+								<p>Aucun lieu connu.</p>
+							{{ end }}
+						</section>
+
+						<section>
+							<strong>Date(s):</strong>
+							{{ if .Dates }}
+								<ul>
+									{{ range .Dates }}
+										<li>{{ . }}</li>
+									{{ end }}
+								</ul>
+							{{ else }}
+								<p>Aucune date connue.</p>
+							{{ end }}
+						</section>
+
+						<section>
+							<strong>Planning (lieu → dates):</strong>
+							{{ if .Rel }}
+								<ul>
+									{{ range $loc, $dates := .Rel }}
+										<li>
+											<em>{{ $loc }}</em>
+											<ul>
+												{{ range $dates }}
+													<li>{{ . }}</li>
+												{{ end }}
+											</ul>
+										</li>
+									{{ end }}
+								</ul>
+							{{ else }}
+								<p>Non disponible.</p>
+							{{ end }}
+						</section>
+					</article>
+				{{ end }}
+			{{ else }}
+				<p>Aucun artiste / concert à afficher.</p>
+			{{ end }}
+		</main>
+	</body>
+	</html>
+
