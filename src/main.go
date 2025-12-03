@@ -67,10 +67,10 @@ type ArtistView struct {
 }
 
 func main() {
-	tmplPath := filepath.Join("template", "index.html")
-	tmpl, err := template.ParseFiles(tmplPath)
+	pattern := filepath.Join("src", "template", "*.html")
+	tmpl, err := template.ParseGlob(pattern)
 	if err != nil {
-		log.Fatalf("failed to parse template: %v", err)
+		log.Fatalf("failed to parse templates: %v", err)
 	}
 
 	artistsView, err := loadArtistsView()
@@ -85,9 +85,58 @@ func main() {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		data := IndexPageData{Artists: artistsView}
-		if err := tmpl.Execute(w, data); err != nil {
+		if err := tmpl.ExecuteTemplate(w, "index.html", data); err != nil {
 			log.Printf("template execute error: %v", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+	})
+
+	// Serve index2 at /index2, so the URL explicitly shows the page name
+	http.HandleFunc("/index2", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/index2" {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		// Reuse same data struct; adjust as needed based on index2 contents
+		data := IndexPageData{Artists: artistsView}
+		if err := tmpl.ExecuteTemplate(w, "index2.html", data); err != nil {
+			log.Printf("template execute error (index2): %v", err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+	})
+
+	// Static assets: CSS and images
+	http.Handle("/CSS/", http.StripPrefix("/CSS/", http.FileServer(http.Dir(filepath.Join("src", "CSS")))))
+	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir(filepath.Join("src", "images")))))
+
+	// Optional additional pages if present: /contact, /panier
+	http.HandleFunc("/contact", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/contact" {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		data := IndexPageData{Artists: artistsView}
+		if err := tmpl.ExecuteTemplate(w, "contact.html", data); err != nil {
+			log.Printf("template execute error (contact): %v", err)
+			http.NotFound(w, r)
+			return
+		}
+	})
+
+	http.HandleFunc("/panier", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/panier" {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		data := IndexPageData{Artists: artistsView}
+		if err := tmpl.ExecuteTemplate(w, "panier.html", data); err != nil {
+			log.Printf("template execute error (panier): %v", err)
+			http.NotFound(w, r)
 			return
 		}
 	})

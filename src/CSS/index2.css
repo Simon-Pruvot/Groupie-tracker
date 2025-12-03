@@ -1,0 +1,16 @@
+.img{
+  display: none;
+}
+
+.hero-img{
+  width: 105%;
+  height: auto;
+}
+
+body{
+  background-image: url('/images/background1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
