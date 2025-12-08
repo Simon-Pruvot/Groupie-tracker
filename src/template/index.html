@@ -1,93 +1,106 @@
 <!doctype html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Groupie Tracker</title>
-		<link rel="stylesheet" href="/CSS/style.css">
-		<link rel="stylesheet" href="/CSS/index.css">
-	</head>
-	<body>
-		{{template "header" .}}
-		<main>
-			<h1>Tous les concerts</h1>
-			{{ if .Artists }}
-				{{ range .Artists }}
-					<article style="border:1px solid #ddd; padding:12px; margin:12px 0;">
-						<header style="display:flex; gap:12px; align-items:center;">
-							<img src="{{ .Image }}" alt="{{ .Name }}" style="width:80px; height:80px; object-fit:cover; border-radius:4px;">
-							<div>
-								<h2 style="margin:0;">{{ .Name }}</h2>
-								<div>
-									<strong>Création:</strong> {{ .CreationDate }} — <strong>Premier album:</strong> {{ .FirstAlbum }}
-								</div>
-							</div>
-						</header>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Groupie Tracker</title>
+        <link rel="stylesheet" href="/CSS/style.css">
+        <link rel="stylesheet" href="/CSS/index.css">
+    </head>
+    <body>
+        {{template "header" .}}
+        <form action="/" method="POST" class="search-form">
+            <input
+                type="text"
+                class="barre-recherche"
+                name="recherche"
+                placeholder="Recherche ..."
+            />
+            <button type="submit" class="btn-barre-recherche"><img class="logo-barre-recherche" src="../images/loupe-1.png" alt="logo-loupe"></button>
+        </form>
 
-						<section>
-							<strong>Membres:</strong>
-							{{ if .Members }}
-								<ul>
-									{{ range .Members }}
-										<li>{{ . }}</li>
-									{{ end }}
-								</ul>
-							{{ else }}
-								<p>N/A</p>
-							{{ end }}
-						</section>
+        <nav class="filter-bar">
+            <div class="sort-section">
+                <span class="sort-label">Trier par :</span>
+                <a href="?sort=ville" class="sort-button">Ville</a>
+                <a href="?sort=genre" class="sort-button">Genre</a>
+                <a href="?sort=date" class="sort-button">Date</a>
+                <a href="?sort=prix" class="sort-button">Prix</a>
+            </div>
 
-						<section>
-							<strong>Lieu(x):</strong>
-							{{ if .Locations }}
-								<ul>
-									{{ range .Locations }}
-										<li>{{ . }}</li>
-									{{ end }}
-								</ul>
-							{{ else }}
-								<p>Aucun lieu connu.</p>
-							{{ end }}
-						</section>
+            <div class="filter-dropdown">
+                <button class="filter-button">Ville</button>
+                <div class="filter-content">
+                    <label>
+                        <input type="checkbox" name="city" value="Paris" checked> Paris
+                    </label>
+                    <label>
+                        <input type="checkbox" name="city" value="Lille"> Lille
+                    </label>
+                    <label>
+                        <input type="checkbox" name="city" value="Marseille"> Marseille
+                    </label>
+                    <label>
+                        <input type="checkbox" name="city" value="Bordeaux"> Bordeaux
+                    </label>
+                    <label>
+                        <input type="checkbox" name="city" value="Lyon"> Lyon
+                    </label>
+                    <label>
+                        <input type="checkbox" name="city" value="Amiens"> Amiens
+                    </label>
+                </div>
+            </div>
+        </nav>
 
-						<section>
-							<strong>Date(s):</strong>
-							{{ if .Dates }}
-								<ul>
-									{{ range .Dates }}
-										<li>{{ . }}</li>
-									{{ end }}
-								</ul>
-							{{ else }}
-								<p>Aucune date connue.</p>
-							{{ end }}
-						</section>
+        <main>
+            <h1>Tous les concerts</h1>
+            
+            <div class="concerts-grid"> 
+            {{ if .Artists }}
+                {{ range .Artists }}
+                    {{ $artistName := .Name }}
+                    {{ $artistImage := .Image }}
 
-						<section>
-							<strong>Planning (lieu → dates):</strong>
-							{{ if .Rel }}
-								<ul>
-									{{ range $loc, $dates := .Rel }}
-										<li>
-											<em>{{ $loc }}</em>
-											<ul>
-												{{ range $dates }}
-													<li>{{ . }}</li>
-												{{ end }}
-											</ul>
-										</li>
-									{{ end }}
-								</ul>
-							{{ else }}
-								<p>Non disponible.</p>
-							{{ end }}
-						</section>
-					</article>
-				{{ end }}
-			{{ else }}
-				<p>Aucun artiste / concert à afficher.</p>
-			{{ end }}
-		</main>
-	</body>
-	</html>
+                    {{ if .Rel }}
+                        {{ range $location, $dates := .Rel }}
+                            {{ range $date := $dates }}
+                                
+                                {{ $price := "175$" }} 
+                                
+                                <div class="concert-card">
+                                    <div class="card-background" style="background-image: url('{{ $artistImage }}');"></div>
+                                    
+                                    <div class="card-content">
+                                        <h2 class="artist-name">{{ $artistName }}</h2>
 
+                                        <div class="concert-date">
+                                            <span style="font-size: 1.2em;">📅</span>
+                                            {{ $date }}
+                                        </div>
+                                        <div class="concert-location">
+                                            <span style="font-size: 1.2em;">📍</span>
+                                            {{ $location }}
+                                        </div>
+
+                                        <div class="concert-details-bottom">
+                                            <div class="concert-price">
+                                                <span class="price-tag">{{ $price }}</span>
+                                            </div>
+                                            <div class="buy-icon">
+                                                🛍️
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ else }}
+                <p>Aucun artiste / concert à afficher.</p>
+            {{ end }}
+            </div> </main>
+        {{template "footer" .}}
+    </body>
+</html>

@@ -65,6 +65,7 @@ type ArtistView struct {
 	Dates        []string
 	Rel          map[string][]string // location -> dates
 }
+var tempgroupes IndexPageData
 
 func main() {
 	pattern := filepath.Join("src", "template", "*.html")
@@ -85,7 +86,14 @@ func main() {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		data := IndexPageData{Artists: artistsView}
-		if err := tmpl.ExecuteTemplate(w, "index.html", data); err != nil {
+		tempgroupes = data
+		if r.Method == http.MethodPost {
+			recherche := r.FormValue("recherche")
+			if recherche != ""{
+				tempgroupes = RechercheGroupe(recherche,data)
+			}
+		}
+		if err := tmpl.ExecuteTemplate(w, "index.html", tempgroupes); err != nil {
 			log.Printf("template execute error: %v", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
@@ -99,8 +107,28 @@ func main() {
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		// Reuse same data struct; adjust as needed based on index2 contents
-		data := IndexPageData{Artists: artistsView}
+		// Minimal data for index2: try to load name of artist with ID=1 directly
+		artistName := ""
+		artistImage := ""
+		var a1 Artist
+		if err := fetchJSON(artistsAPI+"/1", &a1); err == nil {
+			artistName = a1.Name
+			artistImage = a1.Image
+		} else {
+			// Fallback: look in preloaded list
+			for _, a := range artistsView {
+				if a.ID == 1 {
+					artistName = a.Name
+					artistImage = a.Image
+					break
+				}
+			}
+		}
+		type Index2Data struct {
+			ArtistName  string
+			ArtistImage string
+		}
+		data := Index2Data{ArtistName: artistName, ArtistImage: artistImage}
 		if err := tmpl.ExecuteTemplate(w, "index2.html", data); err != nil {
 			log.Printf("template execute error (index2): %v", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -332,4 +360,25 @@ func titleCase(s string) string {
 		words[i] = strings.ToUpper(w[:1]) + w[1:]
 	}
 	return strings.Join(words, " ")
+}
+
+func toLower(s string) string {
+	result := ""
+	for _, c := range s {
+		if c >= 'A' && c <= 'Z' {
+			result += string(c + 32) // Convert uppercase to lowercase
+		} else {
+			result += string(c) // Keep other characters unchanged
+		}
+	}
+	return result
+}
+func RechercheGroupe(nomGroupe string,data IndexPageData) IndexPageData{
+	resultat := make([]ArtistView, 0)
+	for _, groupe := range data.Artists {
+		if toLower(groupe.Name) == toLower(nomGroupe) {
+			resultat = append(resultat, groupe)
+		}
+	}
+	return IndexPageData{resultat}
 }

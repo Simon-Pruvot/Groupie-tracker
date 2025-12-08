@@ -1,16 +1,37 @@
-.img{
-  display: none;
+
+.artist-hero-background img {
+  filter: blur(20px) brightness(0.5);
+  width: 101vw;
+  margin-top: -10vw;
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
-.hero-img{
-  width: 105%;
-  height: auto;
+.artist-hero img {
+  z-index: 1;
+  margin-top: 2.5vw;
+  margin-left: 2.5vw;
+  width: 25vw;
+  border-radius: 40px;
 }
 
-body{
-  background-image: url('/images/background1.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
+#rectangle {
+  width: 80vw;
+  margin-top: 5vw;
+  height: 30vw;
+  background: rgba(255, 255, 255, 0.408);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 40px;
+  z-index: 1;
+  margin-left: 10vw;
+  display: flex;
+}
+
+.name {
+  margin-top: 3vw;
+  margin-left: 4vw;
+  color: white;
 }
