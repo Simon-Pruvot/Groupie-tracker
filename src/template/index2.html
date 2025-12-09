@@ -12,6 +12,17 @@
 </head>
 <body>
     {{template "header" .}}
+
+    {{ $c := 0 }} {{ $pg := 1 }}
+    {{ range .Rel }}
+        {{ if eq (mod $c 5) 0 }}
+            <input type="radio" name="concertPage" id="cp{{$pg}}" class="page-radio" {{if eq $pg 1}}checked{{end}}>
+            {{ $pg = add $pg 1 }}
+        {{ end }}
+        {{ $c = add $c 1 }}
+    {{ end }}
+
+
     <div class="artist-hero-background">
         <img src="{{.ArtistImage}}" alt="{{.ArtistName}}"/>
     </div>
@@ -19,9 +30,51 @@
         <div class="artist-hero">
             <img src="{{.ArtistImage}}" alt="{{.ArtistName}}"/>
         </div>
-        <div class="name">
-        <h1 id="artist-name" class="artiste-name">{{.ArtistName}}</h1>
-    </div>
+        <div class="colonne">
+            <div class="name">
+                <h1 id="artist-name" class="artiste-name">{{.ArtistName}}</h1>
+            </div>
+            <div class="members">
+                <h1 id="artist-members" class="artiste-members">{{ range .Members }}{{ . }} {{ end }}</h1>
+            </div>
+            <div class="creation-date">
+                <h1 id="artist-creation-date" class="artiste-creation-date">Creation Date: {{.CreationDate}}</h1>
+            </div>
+            <div class="first-album">
+                <h1 id="artist-first-album" class="artiste-first-album">First Album: {{.FirstAlbum}}</h1>
+            </div>
+        </div>
+        <div class="relations">
+            <h1 id="artist-relations" class="artiste-relations">Concerts:</h1>
+
+            {{ $i := 0 }}     
+            {{ $p := 1 }}     
+            {{ $total := len .Rel }}
+
+            {{ range $loc, $dates := .Rel }}
+                
+                {{/* Open Page Div */}}
+                {{ if eq (mod $i 5) 0 }}<div class="concert-page-{{ $p }}">{{ end }}
+
+                <div class="concert-info">
+                    <h2>{{ $loc }}</h2>
+                    <ul>{{ range $dates }}<li>{{ . }}</li>{{ end }}</ul>
+                </div>
+
+                {{ $i = add $i 1 }}
+
+                {{/* Close Page Div & Add Arrows */}}
+                {{ if or (eq (mod $i 5) 0) (eq $i $total) }}
+                    <div class="nav-arrows">
+                        {{ if gt $p 1 }}<label for="cp{{ add $p -1 }}" class="btn-prev">← Prev</label>{{ end }}
+                        {{ if lt $i $total }}<label for="cp{{ add $p 1 }}" class="btn-next">Next →</label>{{ end }}
+                    </div>
+                    </div> {{/* Close the .concert-page-X div */}}
+                    {{ if eq (mod $i 5) 0 }}{{ $p = add $p 1 }}{{ end }}
+                {{ end }}
+
+            {{ end }}
+        </div>
     </div>
     {{template "footer" .}}
 </body>

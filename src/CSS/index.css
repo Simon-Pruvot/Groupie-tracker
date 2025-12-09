@@ -9,6 +9,13 @@ body {
 main {
     padding: 20px;
 }
+.hero{
+    padding-top: 1vh;
+    height: 100vh;
+    background-image: url("../images/background-index.jpg");
+    background-size: cover;
+    background-position: center;
+}
 .concerts-grid {
     display: flex;
     flex-wrap: wrap;
@@ -60,7 +67,7 @@ main {
     text-shadow: 1px 1px 3px #000;
 }
 
-.concert-date, .concert-location, .concert-price {
+.concert-date, .concert-location {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -77,10 +84,8 @@ main {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.price-tag {
-    font-size: 1.4em;
-    font-weight: 900;
-    color: #ffcc00; 
+.price-tag { /* removed - kept to avoid breaking other references temporarily */
+    display: none;
 }
 
 .buy-icon {
@@ -92,4 +97,30 @@ main {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.pillule {
+  width: 12vw;
+  margin-top: 11vw;
+  height:4vw;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 40px;
+  z-index: 1;
+  margin-left: 36vw;
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.164);
+}
+
+.play img {
+    width: 5vw;
+    height: 4vw;
+    margin-left: 0.5vw;
+}
+
+.pause img {
+    width: 5vw;
+    height: 4vw;
+    margin-left: 1vw;
 }

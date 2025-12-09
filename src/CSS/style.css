@@ -21,7 +21,7 @@ header {
   border-radius: 100px;
   width: 90vw;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 1vh;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
@@ -32,7 +32,6 @@ header {
   font-family: "Blinker", Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 5px 25px;
   border-radius: 100px;
   width: 40vw;
@@ -41,6 +40,8 @@ header {
   margin-top: 40px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  position: relative;
+  top: 70vh;
 }
 .search-form input[type="text"] {
     flex: 1;
@@ -57,7 +58,7 @@ header {
 
 .txthead {
     font-family: "Blinker", sans-serif;
-    font-size: 2vw;
+    font-size: 1.2vw;
     color: white;
     display: flex;
     gap: 2vw;
@@ -83,7 +84,12 @@ header {
 }
 
 .logo-recherche {
-  height: 2.5vw;
+  height: 1.5vw;
+  width: auto;
+  display: block;
+}
+.logo-panier{
+  height: 2vw;
   width: auto;
   display: block;
 }
@@ -92,6 +98,8 @@ header {
   width: auto;
   display: block;
 }
+
+
 
 header nav a {
   font-family: inherit;
@@ -129,5 +137,24 @@ footer {
   flex-direction: column;
   font-size: 2vh;
 }
+.footer-droite p{
+  color: white;
+  font-size: 1.2vw;
+}
 
+.vinyle{
+    width: 20vw;
+    left: 15%;
+    position: absolute;
+    top : 30%;
+    animation: rotation 5s linear infinite;
+}
 
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

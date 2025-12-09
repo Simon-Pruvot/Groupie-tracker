@@ -8,47 +8,48 @@
         <link rel="stylesheet" href="/CSS/index.css">
     </head>
     <body>
-        {{template "header" .}}
-        <form action="/" method="POST" class="search-form">
-            <input
-                type="text"
-                class="barre-recherche"
-                name="recherche"
-                placeholder="Recherche ..."
-            />
-            <button type="submit" class="btn-barre-recherche"><img class="logo-barre-recherche" src="../images/loupe-1.png" alt="logo-loupe"></button>
-        </form>
-
+        <div class="hero">
+            {{template "header" .}}
+            <form action="/" method="POST" class="search-form">
+                <input
+                    type="text"
+                    class="barre-recherche"
+                    name="recherche"
+                    placeholder="Recherche ..."
+                />
+                <button type="submit" class="btn-barre-recherche"><img class="logo-barre-recherche" src="../images/loupe-1.png" alt="logo-loupe"></button>
+            </form>
+            <img src="../images/vinyl-beatfind.png" alt="img vinyle" class="vinyle">
+            <div class="pillule">
+                <div class="play">
+                    <img src="..//images/bouton-play.png" alt="play-bonton"/>
+                </div>
+                 <div class="pause">
+                    <img src="..//images/bouton-pause.png" alt="pause-bonton"/>
+                </div>
+            </div>
+        </div>
         <nav class="filter-bar">
             <div class="sort-section">
                 <span class="sort-label">Trier par :</span>
                 <a href="?sort=ville" class="sort-button">Ville</a>
                 <a href="?sort=genre" class="sort-button">Genre</a>
                 <a href="?sort=date" class="sort-button">Date</a>
-                <a href="?sort=prix" class="sort-button">Prix</a>
+                <a href="?sort=nom" class="sort-button">Nom A-Z</a>
             </div>
 
             <div class="filter-dropdown">
                 <button class="filter-button">Ville</button>
                 <div class="filter-content">
-                    <label>
-                        <input type="checkbox" name="city" value="Paris" checked> Paris
-                    </label>
-                    <label>
-                        <input type="checkbox" name="city" value="Lille"> Lille
-                    </label>
-                    <label>
-                        <input type="checkbox" name="city" value="Marseille"> Marseille
-                    </label>
-                    <label>
-                        <input type="checkbox" name="city" value="Bordeaux"> Bordeaux
-                    </label>
-                    <label>
-                        <input type="checkbox" name="city" value="Lyon"> Lyon
-                    </label>
-                    <label>
-                        <input type="checkbox" name="city" value="Amiens"> Amiens
-                    </label>
+                    {{ if .Cities }}
+                        {{ range .Cities }}
+                            <label>
+                                <input type="checkbox" class="city-checkbox" name="city" value="{{ . }}"> {{ . }}
+                            </label>
+                        {{ end }}
+                    {{ else }}
+                        <p>Aucune ville disponible.</p>
+                    {{ end }}
                 </div>
             </div>
         </nav>
@@ -56,51 +57,113 @@
         <main>
             <h1>Tous les concerts</h1>
             
-            <div class="concerts-grid"> 
+            <div class="concerts-grid">
             {{ if .Artists }}
                 {{ range .Artists }}
                     {{ $artistName := .Name }}
                     {{ $artistImage := .Image }}
+                    {{ $artistID := .ID }}
+                    {{ $locations := .Locations }}
 
-                    {{ if .Rel }}
-                        {{ range $location, $dates := .Rel }}
-                            {{ range $date := $dates }}
-                                
-                                {{ $price := "175$" }} 
-                                
-                                <div class="concert-card">
-                                    <div class="card-background" style="background-image: url('{{ $artistImage }}');"></div>
-                                    
-                                    <div class="card-content">
-                                        <h2 class="artist-name">{{ $artistName }}</h2>
+                    {{/* Build a data-locations value from .Locations and keys of .Rel (pipe-separated). */}}
+                    <div class="concert-card" data-locations="{{ range .Locations }}{{ if ne . "" }}{{ . }}|{{ end }}{{ end }}{{ if .Rel }}{{ range $loc, $_ := .Rel }}{{ $loc }}|{{ end }}{{ end }}">
+                        <div class="card-background" style="background-image: url('{{ $artistImage }}');"></div>
 
-                                        <div class="concert-date">
-                                            <span style="font-size: 1.2em;">📅</span>
-                                            {{ $date }}
-                                        </div>
-                                        <div class="concert-location">
-                                            <span style="font-size: 1.2em;">📍</span>
-                                            {{ $location }}
-                                        </div>
+                        <div class="card-content">
+                            <h2 class="artist-name">{{ $artistName }}</h2>
 
-                                        <div class="concert-details-bottom">
-                                            <div class="concert-price">
-                                                <span class="price-tag">{{ $price }}</span>
-                                            </div>
-                                            <div class="buy-icon">
-                                                🛍️
-                                            </div>
-                                        </div>
+                            {{ if .Rel }}
+                                {{ range $loc, $dates := .Rel }}
+                                    <div class="concert-location">
+                                        <strong>📍 {{ $loc }}</strong>
                                     </div>
+                                    <ul class="concert-dates">
+                                        {{ range $dates }}
+                                            <li>{{ . }}</li>
+                                        {{ end }}
+                                    </ul>
+                                {{ end }}
+                            {{ else if .Locations }}
+                                <div class="concert-location">
+                                    <span>📍 {{ index .Locations 0 }}</span>
                                 </div>
                             {{ end }}
-                        {{ end }}
-                    {{ end }}
+
+                            <div class="concert-details-bottom">
+                                <a href="/index2?id={{ $artistID }}" class="buy-icon" style="text-decoration: none; color: inherit;">
+                                    🛍️
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 {{ end }}
             {{ else }}
                 <p>Aucun artiste / concert à afficher.</p>
             {{ end }}
-            </div> </main>
+            </div>
+            </main>
         {{template "footer" .}}
+        <script>
+            // Filtre des concerts par ville avec persistance dans l'URL
+            document.addEventListener('DOMContentLoaded', function () {
+                const checkboxes = Array.from(document.querySelectorAll('.city-checkbox'));
+                const cards = Array.from(document.querySelectorAll('.concert-card'));
+
+                // Normalise string: retire accents, trim et met en minuscule
+                function normalize(s) {
+                    if (!s) return '';
+                    try {
+                            return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+                    } catch (e) {
+                        // fallback si normalize non supporté
+                        return s.replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+                    }
+                }
+
+                function readCitiesFromURL() {
+                    const params = new URLSearchParams(window.location.search);
+                    return params.getAll('city').map(c => normalize(c));
+                }
+
+                function writeCitiesToURL(cities) {
+                    const params = new URLSearchParams(window.location.search);
+                    // remove existing city params
+                    params.delete('city');
+                    cities.forEach(c => params.append('city', c));
+                    const newUrl = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
+                    history.replaceState(null, '', newUrl);
+                }
+
+                function updateFilter(alsoUpdateURL = false) {
+                    const selected = checkboxes.filter(cb => cb.checked).map(cb => normalize(cb.value));
+                    if (alsoUpdateURL) writeCitiesToURL(selected);
+                    if (selected.length === 0) {
+                        // Aucun choix -> afficher tous les concerts
+                        cards.forEach(c => c.style.display = '');
+                        return;
+                    }
+                    cards.forEach(c => {
+                        const raw = c.getAttribute('data-locations') || '';
+                        const locs = raw.split('|').map(l => normalize(l)).filter(Boolean);
+                        // Correspondance stricte : la ville cochée doit être exactement égale à one of data-locations (normalisées)
+                        const match = selected.some(city => locs.includes(city));
+                        c.style.display = match ? '' : 'none';
+                    });
+                }
+
+                // Restaurer la sélection depuis l'URL
+                const citiesInURL = readCitiesFromURL();
+                if (citiesInURL.length > 0) {
+                    checkboxes.forEach(cb => {
+                        cb.checked = citiesInURL.includes(normalize(cb.value));
+                    });
+                }
+
+                // Appliquer le filtre initial (affiche tous si rien sélectionné)
+                updateFilter(false);
+
+                checkboxes.forEach(cb => cb.addEventListener('change', function () { updateFilter(true); }));
+            });
+        </script>
     </body>
 </html>
