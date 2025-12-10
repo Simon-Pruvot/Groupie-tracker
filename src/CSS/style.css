@@ -25,6 +25,7 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
+
 .search-form {
   background-color: rgba(85, 85, 85, 0.2);
   backdrop-filter: blur(8px);
@@ -37,12 +38,13 @@ header {
   width: 40vw;
   height: 5vh;
   margin: auto;
-  margin-top: 40px;
+  margin-top: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
   position: relative;
   top: 70vh;
 }
+
 .search-form input[type="text"] {
     flex: 1;
     border: none;
@@ -51,6 +53,7 @@ header {
     font-size: 1.5vw;
     outline: none;
 }
+
 .btn-barre-recherche{
   background-color: transparent;
   border: none;
@@ -65,6 +68,7 @@ header {
     align-items: center;
     margin-right: 2vw;
 }
+
 .txthead a {
     text-decoration: none;
     color: white;
@@ -88,18 +92,18 @@ header {
   width: auto;
   display: block;
 }
+
 .logo-panier{
   height: 2vw;
   width: auto;
   display: block;
 }
+
 .logo-barre-recherche {
   height: 4vh;
   width: auto;
   display: block;
 }
-
-
 
 header nav a {
   font-family: inherit;
@@ -115,21 +119,25 @@ footer {
   margin-top: 40px;
   height: 40vh;
 }
+
 .footer-gauche{
   justify-content: left;
   margin-left: 15vw;
   padding-right: 15vw;
 }
+
 .footer-gauche p{
   color: white;
   font-size: 2.2vh;
 }
+
 .footer-droite{
   justify-content: right;
   margin-left: auto;
   margin-right: 15vw;
   width: 20vw;
 }
+
 .footer-droite a{
   text-decoration: none;
   color: white;
@@ -137,6 +145,7 @@ footer {
   flex-direction: column;
   font-size: 2vh;
 }
+
 .footer-droite p{
   color: white;
   font-size: 1.2vw;
