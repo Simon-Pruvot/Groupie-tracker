@@ -73,6 +73,10 @@ type Index2Data struct {
 	Rel          map[string][]string
 }
 
+type PageData struct {
+	Music string
+}
+
 // --- API Response Structures (Internal) ---
 
 type relationIndex struct {
@@ -101,17 +105,17 @@ type locationsIndex struct {
 func main() {
 	// math add mod func
 	funcMap := template.FuncMap{
-        "add": func(a, b int) int { return a + b },
-        "mod": func(a, b int) int { return a % b },
-    }
+		"add": func(a, b int) int { return a + b },
+		"mod": func(a, b int) int { return a % b },
+	}
 
-    // load template
-    pattern := filepath.Join("src", "template", "*.html")
-    tmpl, err := template.New("").Funcs(funcMap).ParseGlob(pattern) 
-    
-    if err != nil {
-        log.Fatalf("failed to parse templates: %v", err)
-    }
+	// load template
+	pattern := filepath.Join("src", "template", "*.html")
+	tmpl, err := template.New("").Funcs(funcMap).ParseGlob(pattern)
+
+	if err != nil {
+		log.Fatalf("failed to parse templates: %v", err)
+	}
 
 	// Load data once at startup
 	artistsView, err := loadArtistsView()
@@ -159,20 +163,6 @@ func main() {
 			if recherche != "" {
 				data = searchGroup(recherche, data)
 			}
-		}
-
-		sortBy := r.URL.Query().Get("sort")
-		switch sortBy {
-		case "ville":
-			data.Concerts = sortConcertsByCity(data.Artists)
-		case "date":
-			data.Concerts = sortConcertsByDate(data.Artists)
-		case "genre":
-			data.Concerts = sortConcertsByGenre(data.Artists)
-		case "nom", "name":
-			data.Concerts = sortConcertsByName(data.Artists)
-		default:
-			// no concert flattening unless a sort is requested; template will fallback to .Artists
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -252,6 +242,7 @@ func main() {
 	// Static Assets
 	http.Handle("/CSS/", http.StripPrefix("/CSS/", http.FileServer(http.Dir(filepath.Join("src", "CSS")))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir(filepath.Join("src", "images")))))
+	http.Handle("/musique/", http.StripPrefix("/musique/", http.FileServer(http.Dir(filepath.Join("src", "musique")))))
 
 	// Other Pages
 	http.HandleFunc("/contact", makeHandler(tmpl, "contact.html", "/contact", IndexPageData{Artists: artistsView}))
@@ -410,94 +401,4 @@ func firstGenre(genres []string) string {
 		return ""
 	}
 	return genres[0]
-}
-
-// sort by date (ascending), then location, then artist name
-func sortConcertsByDate(artists []ArtistView) []ConcertView {
-	concerts := buildConcerts(artists)
-	sort.SliceStable(concerts, func(i, j int) bool {
-		t1, ok1 := parseDate(concerts[i].Date)
-		t2, ok2 := parseDate(concerts[j].Date)
-		if ok1 && ok2 {
-			if !t1.Equal(t2) {
-				return t1.Before(t2)
-			}
-		} else if ok1 != ok2 {
-			return ok1
-		} else if concerts[i].Date != concerts[j].Date {
-			return concerts[i].Date < concerts[j].Date
-		}
-		// fallback: compare location then artist
-		li := normalizeCity(concerts[i].Location)
-		lj := normalizeCity(concerts[j].Location)
-		if li != lj {
-			return li < lj
-		}
-		return strings.ToLower(concerts[i].ArtistName) < strings.ToLower(concerts[j].ArtistName)
-	})
-	return concerts
-}
-
-// sort by genre (ascending), then date, then artist name
-func sortConcertsByGenre(artists []ArtistView) []ConcertView {
-	concerts := buildConcerts(artists)
-	sort.SliceStable(concerts, func(i, j int) bool {
-		gi := strings.ToLower(strings.TrimSpace(concerts[i].Genre))
-		gj := strings.ToLower(strings.TrimSpace(concerts[j].Genre))
-		if gi != gj {
-			return gi < gj
-		}
-		t1, ok1 := parseDate(concerts[i].Date)
-		t2, ok2 := parseDate(concerts[j].Date)
-		if ok1 && ok2 {
-			if !t1.Equal(t2) {
-				return t1.Before(t2)
-			}
-		} else if ok1 != ok2 {
-			return ok1
-		} else if concerts[i].Date != concerts[j].Date {
-			return concerts[i].Date < concerts[j].Date
-		}
-		return strings.ToLower(concerts[i].ArtistName) < strings.ToLower(concerts[j].ArtistName)
-	})
-	return concerts
-}
-
-// sort by artist name A-Z
-func sortConcertsByName(artists []ArtistView) []ConcertView {
-	concerts := buildConcerts(artists)
-	sort.SliceStable(concerts, func(i, j int) bool {
-		return strings.ToLower(concerts[i].ArtistName) < strings.ToLower(concerts[j].ArtistName)
-	})
-	return concerts
-}
-
-// normalizeCity trims and lower-cases a city name for stable comparisons.
-func normalizeCity(s string) string {
-	return strings.ToLower(strings.TrimSpace(s))
-}
-
-// sortConcertsByCity returns a flattened list of concerts sorted by city, date, then artist name.
-func sortConcertsByCity(artists []ArtistView) []ConcertView {
-	concerts := buildConcerts(artists)
-	sort.SliceStable(concerts, func(i, j int) bool {
-		ci := normalizeCity(concerts[i].Location)
-		cj := normalizeCity(concerts[j].Location)
-		if ci != cj {
-			return ci < cj
-		}
-		t1, ok1 := parseDate(concerts[i].Date)
-		t2, ok2 := parseDate(concerts[j].Date)
-		if ok1 && ok2 {
-			if !t1.Equal(t2) {
-				return t1.Before(t2)
-			}
-		} else if ok1 != ok2 {
-			return ok1
-		} else if concerts[i].Date != concerts[j].Date {
-			return concerts[i].Date < concerts[j].Date
-		}
-		return strings.ToLower(concerts[i].ArtistName) < strings.ToLower(concerts[j].ArtistName)
-	})
-	return concerts
 }

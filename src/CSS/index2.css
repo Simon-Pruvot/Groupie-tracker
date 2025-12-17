@@ -28,15 +28,19 @@
   z-index: 2;
   margin-left: 10vw;
   display: flex;
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 30vw;
+  margin-bottom: 5vw;
 }
 
 .name {
   margin-top: 3vw;
 }
 
-.members {
+.members h3 {
+  color: white;
+  font-size: 1vw;
+  margin-bottom: 0;
 }
 
 .colonne {
@@ -46,19 +50,40 @@
   margin-left: 4vw;
   color: white;
   padding-top: 2vw;
+  max-width: 20vw;
 }
 
 .concert-info {
   margin-left: -10vw;
   color: white;
+  border: white solid 1px;
+  margin-bottom: 1vw;
+  font-size: 0.6vw;
+  border-radius: 50px;
+  justify-items: center;
+  align-items: center;
 }
 
 .relations {
   color: white;
   padding-left: 5vw;
-  max-height: 20vw;
+  margin-left: 8vw;
+  text-align: center; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  max-height: 30vw;
+  width: 30vw;
+  margin-top: 4vw; 
 }
 
+.relations::-webkit-scrollbar {
+    display: none;
+}
+
+.relations h1{
+  margin-left: -10vw;
+}
 
 
 .page-radio { display: none; }
@@ -72,32 +97,77 @@
 #cp5:checked ~ #rectangle .relations .concert-page-5,
 #cp6:checked ~ #rectangle .relations .concert-page-6 {
     display: block;
-    animation: fadeIn 0.5s;
+}
+
+.no-point{
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  align-items: center;
+  margin-left: -3vw;
+  gap: 1vw;
+  max-height: 2vw;
+  overflow-y: auto;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.no-point li{
+  text-align: center;
 }
 
 .nav-arrows {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    visibility: visible;
+    margin-left: -2vw;
+    margin-top: -1vw;
+    gap: 8vw;
 }
+
+.nav-arrows label{
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
 
 .btn-prev, .btn-next {
     cursor: pointer;
     background: #333;
     color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    user-select: none;
+    margin: auto;
+    padding: 0%;
+}
+
+.btn-next{
+  margin-top: -3vw;
+  margin-left: 10vw;
+  padding: 1vw;
+  border-radius: 200px;
+  height: 0.5vw;
+  width: 0.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-prev{
+  margin-top: -3vw;
+  margin-left: -8vw;
+  padding: 1vw;
+  border-radius: 200px;
+  height: 0.5vw;
+  width: 0.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-prev:hover, .btn-next:hover {
-    background: #e91e63; 
+    background:white; 
+    color: black;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}

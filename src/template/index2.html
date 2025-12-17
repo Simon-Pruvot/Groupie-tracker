@@ -3,7 +3,7 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Blinker:wght@100;200;300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -15,7 +15,7 @@
 
     {{ $c := 0 }} {{ $pg := 1 }}
     {{ range .Rel }}
-        {{ if eq (mod $c 5) 0 }}
+        {{ if eq (mod $c 3) 0 }}
             <input type="radio" name="concertPage" id="cp{{$pg}}" class="page-radio" {{if eq $pg 1}}checked{{end}}>
             {{ $pg = add $pg 1 }}
         {{ end }}
@@ -35,44 +35,60 @@
                 <h1 id="artist-name" class="artiste-name">{{.ArtistName}}</h1>
             </div>
             <div class="members">
-                <h1 id="artist-members" class="artiste-members">{{ range .Members }}{{ . }} {{ end }}</h1>
+                <h3 id="artist-members" class="artiste-members">{{ range .Members }}{{ . }} {{ end }}</h3>
             </div>
             <div class="creation-date">
-                <h1 id="artist-creation-date" class="artiste-creation-date">Creation Date: {{.CreationDate}}</h1>
+                <h3 id="artist-creation-date" class="artiste-creation-date">Creation Date: {{.CreationDate}}</h3>
             </div>
             <div class="first-album">
-                <h1 id="artist-first-album" class="artiste-first-album">First Album: {{.FirstAlbum}}</h1>
+                <h3 id="artist-first-album" class="artiste-first-album">First Album: {{.FirstAlbum}}</h3>
             </div>
         </div>
         <div class="relations">
-            <h1 id="artist-relations" class="artiste-relations">Concerts:</h1>
+
+
+            
+
 
             {{ $i := 0 }}     
             {{ $p := 1 }}     
             {{ $total := len .Rel }}
 
+            <h1 id="artist-relations" class="artiste-relations">Concerts:</h1>
+            
             {{ range $loc, $dates := .Rel }}
+
+                
                 
                 {{/* Open Page Div */}}
-                {{ if eq (mod $i 5) 0 }}<div class="concert-page-{{ $p }}">{{ end }}
+                {{ if eq (mod $i 3) 0 }}
 
-                <div class="concert-info">
-                    <h2>{{ $loc }}</h2>
-                    <ul>{{ range $dates }}<li>{{ . }}</li>{{ end }}</ul>
-                </div>
-
-                {{ $i = add $i 1 }}
-
-                {{/* Close Page Div & Add Arrows */}}
-                {{ if or (eq (mod $i 5) 0) (eq $i $total) }}
+                <div class="concert-page-{{ $p }}">
                     <div class="nav-arrows">
-                        {{ if gt $p 1 }}<label for="cp{{ add $p -1 }}" class="btn-prev">← Prev</label>{{ end }}
-                        {{ if lt $i $total }}<label for="cp{{ add $p 1 }}" class="btn-next">Next →</label>{{ end }}
+                        <label for="cp{{ add $p -1 }}" class="btn-prev" {{ if le $p 1 }}{{ end }}>◀</label>
+                        <label for="cp{{ add $p 1 }}" class="btn-next" {{ if ge (add $i 3) $total }}{{ end }}>▶</label>
                     </div>
-                    </div> {{/* Close the .concert-page-X div */}}
-                    {{ if eq (mod $i 5) 0 }}{{ $p = add $p 1 }}{{ end }}
                 {{ end }}
 
+                    <div class="concert-info">
+                        <h3>{{ $loc }}</h3>
+                        <ul class="no-point">
+                            {{ range $dates }}
+                                <li>{{ . }}</li>
+                            {{ end }}
+                        </ul>
+                    </div>
+
+                    {{ $i = add $i 1 }}
+
+                    {{/* Close Page Div */}}
+                    {{ if or (eq (mod $i 3) 0) (eq $i $total) }}
+                </div> 
+                        {{/* Close the .concert-page-X div */}}
+                        {{ if eq (mod $i 3) 0 }}
+                            {{ $p = add $p 1 }}
+                        {{ end }}
+                    {{ end }}
             {{ end }}
         </div>
     </div>

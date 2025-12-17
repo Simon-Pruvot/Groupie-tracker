@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="fr">
     <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Groupie Tracker</title>
@@ -19,87 +22,70 @@
                 />
                 <button type="submit" class="btn-barre-recherche"><img class="logo-barre-recherche" src="../images/loupe-1.png" alt="logo-loupe"></button>
             </form>
-            <img src="../images/vinyl-beatfind.png" alt="img vinyle" class="vinyle">
+            <img src="../images/vinyl-beatfind.png" alt="img vinyle" class="vinyle" id="vinyl" style="animation-play-state: paused;">
             <div class="pillule">
-                <div class="play">
+                <div class="play" id="btn-play" style="cursor: pointer;">
                     <img src="..//images/bouton-play.png" alt="play-bonton"/>
                 </div>
-                 <div class="pause">
+                 <div class="pause" id="btn-pause" style="cursor: pointer;">
                     <img src="..//images/bouton-pause.png" alt="pause-bonton"/>
                 </div>
             </div>
+            <audio id="bg-music" src="/musique/musique.mp3" loop></audio>
         </div>
-        <nav class="filter-bar">
-            <div class="sort-section">
-                <span class="sort-label">Trier par :</span>
-                <a href="?sort=ville" class="sort-button">Ville</a>
-                <a href="?sort=genre" class="sort-button">Genre</a>
-                <a href="?sort=date" class="sort-button">Date</a>
-                <a href="?sort=nom" class="sort-button">Nom A-Z</a>
-            </div>
-
-            <div class="filter-dropdown">
-                <button class="filter-button">Ville</button>
-                <div class="filter-content">
-                    {{ if .Cities }}
-                        {{ range .Cities }}
-                            <label>
-                                <input type="checkbox" class="city-checkbox" name="city" value="{{ . }}"> {{ . }}
-                            </label>
-                        {{ end }}
-                    {{ else }}
-                        <p>Aucune ville disponible.</p>
-                    {{ end }}
+        <div class="theodora">
+            <img src="../images/background-textur.png" alt="texture-background" class="texture-background-theodora">
+            <img src="../images/Theodora.png" alt="imageTheodora" class="theodora-img">
+            <div class="box-info-theodora">
+                <div class="top-info-theodora">
+                    <h2 class="title-theodora">Theodora</h2>
+                    <div class="droite-theodora">
+                        <p>14/06/2025</p>
+                        <img src="../images/etoile.png" alt="étoile">
+                        <p>Paris</p>
+                        <img src="../images/maison.png" alt="maison">
+                    </div>
                 </div>
-            </div>
-        </nav>
+                <p class="text-theodora">Assistez au concert de Theodora le 14 juin 2025 au Trianon de Paris, et laissez-vous porter par l'univers envoûtant de cette artiste montante de la scène française.</p>
+            </div> 
+        </div>
+        <div class="Florent">
+            <img src="../images/background-textur-2.jpg" alt="texture-background-2" class="texture-background-florent">
+            <img src="../images/Florent-pagny.png" alt="imageFlorent" class="florent-img">
+            <div class="box-info-florent">
+                <div class="top-info-florent">
+                    <h2 class="title-florent">Florent Pagny</h2>
+                    <div class="droite-florent">
+                        <p>15/04/2026</p>
+                        <img src="../images/etoile.png" alt="étoile">
+                        <p>Amiens</p>
+                        <img src="../images/maison.png" alt="maison">
+                    </div>
+                </div>
+                <p class="text-florent">Assistez au concert de Florent Pagny le 15 avril 2026 au zénith d'Amiens, et laissez-vous porter par l'univers envoûtant de cet artiste d'époque de la scène française.</p>
+            </div> 
+        </div>
+        
 
         <main>
             <h1>Tous les concerts</h1>
             
-            <div class="concerts-grid">
-            {{ if .Artists }}
-                {{ range .Artists }}
-                    {{ $artistName := .Name }}
-                    {{ $artistImage := .Image }}
-                    {{ $artistID := .ID }}
-                    {{ $locations := .Locations }}
-
-                    {{/* Build a data-locations value from .Locations and keys of .Rel (pipe-separated). */}}
-                    <div class="concert-card" data-locations="{{ range .Locations }}{{ if ne . "" }}{{ . }}|{{ end }}{{ end }}{{ if .Rel }}{{ range $loc, $_ := .Rel }}{{ $loc }}|{{ end }}{{ end }}">
-                        <div class="card-background" style="background-image: url('{{ $artistImage }}');"></div>
-
-                        <div class="card-content">
-                            <h2 class="artist-name">{{ $artistName }}</h2>
-
-                            {{ if .Rel }}
-                                {{ range $loc, $dates := .Rel }}
-                                    <div class="concert-location">
-                                        <strong>📍 {{ $loc }}</strong>
-                                    </div>
-                                    <ul class="concert-dates">
-                                        {{ range $dates }}
-                                            <li>{{ . }}</li>
-                                        {{ end }}
-                                    </ul>
-                                {{ end }}
-                            {{ else if .Locations }}
-                                <div class="concert-location">
-                                    <span>📍 {{ index .Locations 0 }}</span>
-                                </div>
-                            {{ end }}
-
-                            <div class="concert-details-bottom">
-                                <a href="/index2?id={{ $artistID }}" class="buy-icon" style="text-decoration: none; color: inherit;">
-                                    🛍️
-                                </a>
+            <!-- Grille des groupes : un carré par groupe -->
+            <h2>Tous les groupes</h2>
+            <div class="bk_ticket-1"></div>
+            <div class="Card-artistes-container">
+                {{range .Artists}}
+                    <div class="Card-artiste">
+                        <a href="http://localhost:8080/index2?id={{.ID}}">
+                            <div class="Card-artiste-content">
+                                <img src="{{.Image}}" alt="Image de {{.Name}}" class="Artiste-image"/>
+                                <h1 class="Artiste-nom">{{.Name}}</h1>
+                                <h1 class="Date-creation">{{.CreationDate}}</h1>
                             </div>
-                        </div>
+                            <h1 class="en-savoir-plus">EN SAVOIR PLUS</h1>
+                        </a>
                     </div>
-                {{ end }}
-            {{ else }}
-                <p>Aucun artiste / concert à afficher.</p>
-            {{ end }}
+                {{end}}
             </div>
             </main>
         {{template "footer" .}}
@@ -165,5 +151,165 @@
                 checkboxes.forEach(cb => cb.addEventListener('change', function () { updateFilter(true); }));
             });
         </script>
+        <script>
+            // Affiche une seule carte simplifiée : le concert le plus récent (ville + date)
+            document.addEventListener('DOMContentLoaded', function () {
+                function parseDateFlexible(s) {
+                    if (!s) return null;
+                    s = s.trim();
+                    let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                    if (m) return new Date(parseInt(m[1],10), parseInt(m[2],10)-1, parseInt(m[3],10));
+                    m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                    if (m) return new Date(parseInt(m[3],10), parseInt(m[2],10)-1, parseInt(m[1],10));
+                    const pd = Date.parse(s);
+                    return isNaN(pd) ? null : new Date(pd);
+                }
+
+                const cards = Array.from(document.querySelectorAll('.concert-card'));
+                const dated = [];
+
+                cards.forEach(card => {
+                    const artistEl = card.querySelector('.artist-name');
+                    const artistName = artistEl ? artistEl.textContent.trim() : '';
+                    const linkEl = card.querySelector('.concert-details-bottom a');
+                    const linkHref = linkEl ? linkEl.getAttribute('href') : '#';
+
+                    // trouver toutes les dates à l'intérieur de la carte
+                    const dateEls = Array.from(card.querySelectorAll('.concert-dates li, .concert-dates span'));
+                    dateEls.forEach(el => {
+                        const raw = el.textContent.trim();
+                        const dt = parseDateFlexible(raw);
+                        if (dt) {
+                            // essayer aussi de trouver la ville associée : la div.concert-location la plus proche avant
+                            let loc = '';
+                            const prev = el.closest('.card-content') ? Array.from(el.closest('.card-content').querySelectorAll('.concert-location')) : [];
+                            if (prev.length) loc = prev[prev.length-1].textContent.trim().replace(/\s+/g,' ');
+                            dated.push({card, date: dt, raw, location: loc, artistName, linkHref});
+                        }
+                    });
+                });
+
+                if (dated.length === 0) return;
+                dated.sort((a,b) => b.date - a.date);
+                const latest = dated[0];
+                const latestCard = latest.card;
+
+                // cacher toutes les autres cartes
+                cards.forEach(c => { if (c !== latestCard) c.style.display = 'none'; });
+
+                // simplifier le contenu de la carte retenue pour n'afficher que artiste, ville et date
+                const content = latestCard.querySelector('.card-content');
+                if (content) {
+                    content.innerHTML = '';
+                    const h = document.createElement('h2');
+                    h.className = 'artist-name';
+                    h.textContent = latest.artistName || '';
+                    const loc = document.createElement('div');
+                    loc.className = 'concert-location';
+                    loc.innerHTML = `<strong>${latest.location || ''}</strong>`;
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'concert-dates';
+                    dateDiv.innerHTML = `<span>${latest.raw}</span>`;
+                    const bottom = document.createElement('div');
+                    bottom.className = 'concert-details-bottom';
+                    bottom.innerHTML = `<a href="${latest.linkHref}" class="buy-icon" style="text-decoration:none;color:inherit;"></a>`;
+                    content.appendChild(h);
+                    content.appendChild(loc);
+                    content.appendChild(dateDiv);
+                    content.appendChild(bottom);
+                }
+
+                latestCard.classList.add('highlight-latest');
+            });
+        </script>
+        <script>
+            // Pour chaque carte, ne montrer que le concert le plus récent (par date)
+            document.addEventListener('DOMContentLoaded', function () {
+                const cards = Array.from(document.querySelectorAll('.concert-card'));
+
+                function tryParseDate(s) {
+                    if (!s) return null;
+                    s = s.trim();
+                    // ISO like 2025-06-14
+                    const iso = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                    if (iso) return new Date(parseInt(iso[1],10), parseInt(iso[2],10)-1, parseInt(iso[3],10));
+                    // dd/mm/yyyy or dd-mm-yyyy
+                    const dmy = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                    if (dmy) return new Date(parseInt(dmy[3],10), parseInt(dmy[2],10)-1, parseInt(dmy[1],10));
+                    // fallback: try Date.parse
+                    const pd = Date.parse(s);
+                    return isNaN(pd) ? null : new Date(pd);
+                }
+
+                cards.forEach(card => {
+                    const content = card.querySelector('.card-content');
+                    if (!content) return;
+
+                    // parcourir blocs: <div.concert-location> suivi de <ul.concert-dates>
+                    const children = Array.from(content.children);
+                    const pairs = [];
+
+                    for (let i = 0; i < children.length; i++) {
+                        const ch = children[i];
+                        if (ch.classList && ch.classList.contains('concert-location')) {
+                            const loc = ch.textContent.trim().replace(/\s+/g,' ');
+                            const next = children[i+1];
+                            if (next && next.classList && (next.classList.contains('concert-dates') || next.tagName.toLowerCase() === 'ul')) {
+                                const items = Array.from(next.querySelectorAll('li'));
+                                items.forEach(li => {
+                                    const raw = li.textContent.trim();
+                                    const dt = tryParseDate(raw);
+                                    if (dt) pairs.push({date: dt, dateStr: raw, location: loc});
+                                });
+                            }
+                        }
+                    }
+
+                    if (pairs.length === 0) return; // rien à faire
+
+                    pairs.sort((a,b) => b.date - a.date);
+                    const latest = pairs[0];
+
+                    // supprimer blocs originaux location/dates
+                    children.forEach(ch => {
+                        if (ch.classList && (ch.classList.contains('concert-location') || ch.classList.contains('concert-dates'))) ch.remove();
+                    });
+
+                    // insérer un bloc simplifié avant le bloc .concert-details-bottom
+                    const details = content.querySelector('.concert-details-bottom');
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'concert-location';
+                    const dateNode = document.createElement('div');
+                    dateNode.className = 'concert-dates';
+                    dateNode.textContent = latest.dateStr;
+                    wrapper.innerHTML = `<strong>${latest.location}</strong>`;
+                    wrapper.appendChild(dateNode);
+                    if (details) content.insertBefore(wrapper, details);
+                    else content.appendChild(wrapper);
+                });
+            });
+        </script>
+        
+        <script>
+            const music = document.getElementById('bg-music');
+            const vinyl = document.getElementById('vinyl');
+            const btnPlay = document.getElementById('btn-play');
+            const btnPause = document.getElementById('btn-pause');
+
+            if (btnPlay && btnPause && music && vinyl) {
+                btnPlay.addEventListener('click', () => {
+                    music.play();
+                    vinyl.style.animation = 'rotation 5s linear infinite';
+                    vinyl.style.animationPlayState = 'running';
+                });
+
+                btnPause.addEventListener('click', () => {
+                    music.pause();
+                    vinyl.style.animation = 'none'; // Resets rotation to 0
+                });
+            }
+        </script>
     </body>
 </html>
+
+        
