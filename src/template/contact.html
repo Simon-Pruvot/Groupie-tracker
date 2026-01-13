@@ -1,21 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
     <head>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Groupie Tracker - Contact</title>
         <link rel="stylesheet" href="/CSS/style.css">
-        <link rel="stylesheet" href="../CSS/index2.css">
+        <link rel="stylesheet" href="/CSS/contact.css">
     </head>
-<body>
-        <div class="card">
-            <div class="content">
-                <div class="picture">
-                    <img src="">
-                </div>
-                <h1>Contact Me</h1>
-         <div>          
-<body>
+    <body>
+        <div class="hero-contact">
+            {{template "header" .}}
+            
+            <div class="contact-container">
+                <h1>Contactez-nous</h1>
+                <form class="contact-form" action="https://formspree.io/f/xnjjqjnz" method="POST">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="prenom">Prénom</label>
+                            <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="nom">Nom</label>
+                            <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="objet">Objet</label>
+                        <input type="text" id="objet" name="objet" placeholder="L'objet de votre contact" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Votre message..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Envoyer</button>
+                </form>
+            </div>
+        </div>
+        {{template "footer" .}}
+    </body>
+</html>

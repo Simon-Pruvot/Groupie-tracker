@@ -123,8 +123,6 @@ func main() {
 		log.Printf("warning: failed to load artists view: %v", err)
 	}
 
-	// --- Handlers ---
-
 	// Home / Search
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {

@@ -10,6 +10,7 @@ body {
 
 main {
     padding: 20px;
+    position: relative;
 }
 .hero{
     padding-top: 1vh;
@@ -170,7 +171,7 @@ main {
 .title-theodora{
     font-size: 2.5em;
     font-weight: bold;
-    text-shadow: rgb(117, 117, 117) 0.1em 0.1em 0.2em;
+    text-shadow: rgba(255, 0, 242, 0.151) 0.1em 0.1em 0.2em;
     margin-left: 4vw;
 }
 .top-info-theodora{
@@ -229,7 +230,7 @@ main {
     background-size: cover;
     background-position: center;
     z-index: -1;
-    opacity: 0.2;
+    opacity: 0.5;
 }
 
 .box-info-florent{
@@ -248,7 +249,7 @@ main {
 .title-florent{
     font-size: 2.5em;
     font-weight: bold;
-    text-shadow: rgb(117, 117, 117) 0.1em 0.1em 0.2em;
+    text-shadow: rgba(0, 0, 0, 0.147) 0.1em 0.1em 0.2em;
     margin-left: 4vw;
 }
 .top-info-florent{
@@ -344,7 +345,8 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     gap: 5vw;
-    margin: 7vh 5vw;
+    margin: 15vh 5vw;
+    position: relative;
     z-index: 99;
 }
 .Date-creation{
@@ -373,18 +375,76 @@ main {
     border: 1px solid white;
     background-color: transparent;
     color: white;
+    transition: all 0.3s ease;
 }
 
-.bk_ticket-1{
-    display: relative;
+.en-savoir-plus:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.background-tickets {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg-ticket {
+    position: absolute;
     width: 70vw;
-    height: 100vh;
-    background-image: url("../images/background-ticket-1.png");
-    background-size: cover;
-    background-position: center;
-    z-index: -100;
-    margin-bottom: -40vw;
-    margin-left: 10vw;
-    margin-top: 10vw;
-    rotate: 10;
+    opacity: 0.8;
+}
+
+.ticket-1 {
+    top: 5%;
+    left: -5%;
+    transform: rotate(-12deg);
+}
+
+.ticket-2 {
+    top: 20%;
+    right: -8%;
+    transform: rotate(15deg);
+}
+
+.ticket-3 {
+    top: 40%;
+    left: 10%;
+    transform: rotate(8deg);
+}
+
+.ticket-4 {
+    top: 60%;
+    right: 5%;
+    transform: rotate(-10deg);
+}
+
+.ticket-5 {
+    top: 75%;
+    left: -2%;
+    transform: rotate(18deg);
+}
+
+.ticket-6 {
+    top: 90%;
+    right: 12%;
+    transform: rotate(-6deg);
+}
+
+.background-tickets.single-card-view .bg-ticket {
+    display: none;
+}
+
+.background-tickets.single-card-view .ticket-1 {
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-5deg);
+    width: 60vw;
 }
