@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -247,8 +248,12 @@ func main() {
 	http.HandleFunc("/panier", makeHandler(tmpl, "panier.html", "/panier", IndexPageData{Artists: artistsView}))
 
 	// Start Server
-	log.Println("Server running on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Println("Server running on http://localhost:" + port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("server error: %v", err)
 	}
 }

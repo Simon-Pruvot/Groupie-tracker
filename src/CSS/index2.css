@@ -174,3 +174,98 @@
     color: black;
 }
 
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+  .artist-hero-background img {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 0;
+    object-fit: cover;
+  }
+
+  #rectangle {
+    box-sizing: border-box;
+    width: auto;
+    height: auto;
+    margin: 24px 16px;
+    padding: 20px 16px 28px;
+    border-radius: 32px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .artist-hero img {
+    width: 60vw;
+    margin: 0;
+    border-radius: 28px;
+  }
+
+  .colonne {
+    align-items: center;
+    text-align: center;
+    max-width: none;
+    margin: 16px 0 0;
+    padding: 0;
+  }
+
+  .name { margin-top: 0; }
+  .name h1 { margin: 0 0 4px; }
+
+  .members h3 { font-size: 14px; }
+
+  .creation-date h3,
+  .first-album h3 {
+    font-size: 15px;
+    margin: 8px 0 0;
+  }
+
+  .relations {
+    width: 100%;
+    max-height: none;
+    margin: 20px 0 0;
+    padding: 0;
+  }
+
+  .relations h1 {
+    margin: 0 0 12px;
+    font-size: 22px;
+  }
+
+  .nav-arrows {
+    justify-content: center;
+    gap: 24px;
+    margin: 0 0 12px;
+  }
+
+  .btn-prev,
+  .btn-next {
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .concert-info {
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 0 10px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+
+  .concert-info h3 {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .no-point {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 12px;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+  }
+}

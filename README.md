@@ -66,3 +66,15 @@ L'application interagit avec les endpoints suivants :
 
 ## Auteur
 Ce projet a été développé par Simon Pruvot et Romain.
+
+## Déploiement (Coolify)
+
+| Réglage | Valeur |
+|---|---|
+| Source | GitHub App → `Simon-Pruvot/Groupie-tracker`, branche `main` |
+| Build Pack | **Dockerfile** |
+| Ports Exposes | `8080` |
+| Variables | aucune (`PORT=8080` est déjà défini dans l'image) |
+| Stockage | aucun |
+
+L'image compile le serveur Go et embarque `src/` (templates, CSS, images, musique). Le healthcheck interroge `/contact`.

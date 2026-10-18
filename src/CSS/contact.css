@@ -121,3 +121,36 @@ body {
     box-shadow: 0 10px 25px rgba(255, 255, 255, 0.4);
     background-color: #f0f0f0;
 }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .contact-container {
+        box-sizing: border-box;
+        width: calc(100% - 32px);
+        margin-top: 24px;
+        padding: 24px 20px;
+        border-radius: 28px;
+    }
+
+    .contact-container h1 {
+        font-size: 1.8em;
+        margin: 0 0 16px;
+    }
+
+    .contact-form { gap: 16px; }
+
+    .form-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .input-group { gap: 6px; }
+
+    .input-group input,
+    .input-group textarea { padding: 12px 14px; }
+
+    .btn-submit {
+        margin-top: 8px;
+        padding: 12px 24px;
+    }
+}
