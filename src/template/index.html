@@ -31,11 +31,11 @@
                     <img src="/images/bouton-pause.png" alt="pause-bonton"/>
                 </div>
             </div>
-            <audio id="bg-music" src="/musique/musique.mp3" loop></audio>
+            <audio id="bg-music" src="/musique/musique.mp3" loop preload="none"></audio>
         </div>
         <div class="theodora">
-            <img src="/images/background-textur.png" alt="texture-background" class="texture-background-theodora">
-            <img src="/images/Theodora.png" alt="imageTheodora" class="theodora-img">
+            <img src="/images/background-textur.jpg" alt="texture-background" class="texture-background-theodora">
+            <img src="/images/Theodora.jpg" alt="imageTheodora" class="theodora-img">
             <div class="box-info-theodora">
                 <div class="top-info-theodora">
                     <h2 class="title-theodora">Theodora</h2>
@@ -51,7 +51,7 @@
         </div>
         <div class="Florent">
             <img src="/images/background-textur-2.jpg" alt="texture-background-2" class="texture-background-florent">
-            <img src="/images/Florent-pagny.png" alt="imageFlorent" class="florent-img">
+            <img src="/images/Florent-pagny.jpg" alt="imageFlorent" class="florent-img">
             <div class="box-info-florent">
                 <div class="top-info-florent">
                     <h2 class="title-florent">Florent Pagny</h2>
@@ -81,7 +81,7 @@
                     <div class="Card-artiste">
                         <a href="/index2?id={{.ID}}">
                             <div class="Card-artiste-content">
-                                <img src="{{.Image}}" alt="Image de {{.Name}}" class="Artiste-image"/>
+                                <img src="{{.Image}}" alt="Image de {{.Name}}" class="Artiste-image" loading="lazy" decoding="async"/>
                                 <h1 class="Artiste-nom">{{.Name}}</h1>
                                 <h1 class="Date-creation">{{.CreationDate}}</h1>
                             </div>
