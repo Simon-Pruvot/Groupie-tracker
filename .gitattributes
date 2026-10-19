@@ -1,2 +1,11 @@
-# Auto detect text files and perform LF normalization
-* text
+# Détection automatique des fichiers texte (fins de ligne normalisées en LF)
+* text=auto
+# Binaires : jamais convertis (sinon git abîme les images et la musique)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.mp3 binary
+*.exe binary
